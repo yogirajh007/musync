@@ -80,7 +80,10 @@
                                                         x.play();
                                                         y.play();
                                                         vid_url=url;
+                                                        if(rem_url == undefined)
+                                                        {
                                                         socket.emit('set-video', ROOM_ID ,vid_url, x.currentTime )
+                                                        }
                                                         }
                                                         else
                                                         {
@@ -106,8 +109,10 @@
                                                         x.play();
                                                         y.play();
                                                         vid_url=url;
+                                                        if(rem_url == undefined)
+                                                        {
                                                         socket.emit('set-video', ROOM_ID ,vid_url, x.currentTime )
-                                                        };
+                                                        }                                                        };
                                                         });
                                                         }
                                                         function addvalue(){
