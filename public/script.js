@@ -15,14 +15,16 @@ socket.on('pause-video',(time) =>
 	{
 	console.log("Please pause video")
 	x.pause();
-	x.currentTime = time;
+	y.pause();
+	//x.currentTime = time;
 	})
 
 socket.on('play-video',(time) =>
 	{
 	console.log("Please play video")
 	x.play();
-	x.currentTime = time;
+	y.pause();
+	//x.currentTime = time;
 	})
 
 socket.on('set-video', (url,time) =>
