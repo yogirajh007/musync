@@ -1,1 +1,3 @@
 # musync
+
+Syncronized music listening.
