@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hello world</title>
+   </head>
+   <script src = "/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  
+   <body>Hello world
+	   <input id="text" type="email"></input> 
+   <button id="send" name="send">Click me</button>
+
+<script>
+
+      var socket = io('/admin');
+   </script>
+   <script>
+	   $("#send").click(function(){
+        alert("Sending : " + $("#text").val());
+        socket.emit("toServer", {
+            message: $("#text").val()
+        });
+    });
+    socket.on('toClient', function (data) {
+        alert (data.message);
+    });
+</script>
+   </body>
+</html>

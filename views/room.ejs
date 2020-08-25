@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>Compile and Execute your program...</title>
+                <!-- Font Awesome -->
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+                <!-- Bootstrap core CSS -->
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+                <!-- Material Design Bootstrap -->
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.0/css/mdb.min.css" rel="stylesheet">
+        </head>
+        <script>
+        const ROOM_ID = "<%= roomId %>"
+        </script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="script.js"></script>
+        <body>
+                <!--Navbar -->
+                <!--/.Navbar -->
+                <div class="container" style="padding-top: 10px;">
+                        <div class="row">
+                                <div class="col-md-6 col-lg-6">
+                                        <div class="form-group" >
+                                                <form action="" method="post" id="testform">
+                                                        <h2>Search and add to list:</h2>
+                                                        <br>
+                                                        <input type="text" placeholder="Search" id="search" name="search" value="https://www.youtube.com/watch?v=NSWrgjrfI8E">
+                                                        <script>
+                                                        function getvalue(rem_url,timed){
+                                                        if(rem_url == undefined)
+	url = $("#search").val();
+							else
+								url = rem_url;
+                                                        var oThis = $(this);
+                                                        oThis.attr('disabled', true);
+                                                        $.get('https://music.dexteroot.ml/vendor/athlon1600/youtube-downloader/public/video_info.php', {url: url}, function (data) {
+                                                        console.log(data);
+                                                        oThis.attr('disabled', false);
+                                                        var links = data['links'];
+                                                        var error = data['error'];
+                                                        if (error) {
+                                                        alert('Error: ' + error);
+                                                        return;
+                                                        }
+                                                        // first link with video
+                                                        var first = links.find(function (link) {
+                                                        return link['format'].indexOf('720p') !== -1;
+                                                        });
+                                                        if (typeof first === 'undefined') {
+                                                        alert('No video found!');
+                                                        return;
+                                                        }
+                                                        var stream_url = 'https://music.dexteroot.ml/vendor/athlon1600/youtube-downloader/public/stream.php?url=' + encodeURIComponent(first['url']);
+                                                        if(document.getElementById("myvideo"))
+                                                        {
+                                                        console.log("test")
+                                                        x = document.getElementById("myvideo");
+                                                        x.setAttribute("src",stream_url);
+                                                        x.setAttribute("id", "myvideo");
+                                                        x.setAttribute("width", "320");
+                                                        x.setAttribute("height", "240");
+								if(timed)
+								x.currenttime = timed;
+                                                        x.setAttribute("controls", "controls");
+                                                        var iddiv = document.getElementById('res')
+                                                        iddiv.appendChild(x);
+vid_url=url;
+                                                        }
+                                                        else
+                                                        {
+                                                        x = document.createElement("VIDEO");
+                                                        x.setAttribute("src",stream_url);
+                                                        x.setAttribute("id", "myvideo");
+                                                        x.setAttribute("width", "320");
+                                                        x.setAttribute("height", "240");
+                                                        x.setAttribute("controls", "controls");
+                                                        var iddiv = document.getElementById('res')
+                                                        iddiv.appendChild(x);
+								vid_url=url;
+                                                        };
+                                                        });
+                                                        }
+                                                        function addvalue(){
+                                                        var url = $("#search").val();
+                                                        console.log(url)
+                                                        a = document.createElement("div");
+                                                        a.innerHTML+="<li>"+url+"</li>";
+                                                        a.setAttribute("id", "v1");
+                                                        var iddiv = document.getElementById('rest')
+                                                        iddiv.appendChild(a);
+                                                        }
+socket.emit('set-video', ROOM_ID ,vid_url, x.currentTime )
+                                                        </script>
+                                                        <button type="button" id="butt" onclick="getvalue()">Search </button>
+                                                        <button type="button" id="add" onclick="addvalue()">Add to list </button>
+                                                </form>
+                                                <br>
+                                                Playlist:
+                                                <div id="rest"></div>
+                                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                        </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6" id="result">
+                                        <h2>Result:</h2>
+                                        <div id= "res"></div>
+                                        <button id="play" onclick="playVid()" >Play</button>
+                                        <button id="pause" onclick="pauseVid()" >Pause</button>
+                                </div>
+                        </div>
+                </div>
+                <script>
+                function playVid() {
+                x.play();
+socket.emit('video-played', ROOM_ID, x.currentTime)
+                }
+                function pauseVid() {
+		x.pause();
+socket.emit('video-paused', ROOM_ID, x.currentTime)
+                }
+                </script>
+                <!-- Bootstrap tooltips -->
+                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+                <!-- Bootstrap core JavaScript -->
+                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.min.js"></script>
+                <!-- MDB core JavaScript -->
+                <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.7.0/js/mdb.min.js"></script>
+        </body>
+</html>
