@@ -152,11 +152,13 @@
                 function playVid() {
                 x.play();
                 y.play();
-                y.muted = false;
+                //y.muted = false;
 socket.emit('video-played', ROOM_ID, x.currentTime)
                 }
                 function toggleVid() {
+                        console.log(y.muted);
                 y.muted = !y.muted;
+                console.log(y.muted);
                 }
                 function pauseVid() {
                 x.pause();
